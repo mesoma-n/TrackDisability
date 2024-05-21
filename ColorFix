@@ -1,0 +1,75 @@
+import pygame
+import sys
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Screen dimensions
+width, height = 800, 600
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption('Shape Matching Game for Colorblind Children')
+
+# Colors
+black = (0, 0, 0)
+white = (255, 255, 255)
+blue = (0, 0, 255)
+red = (255, 0, 0)
+green = (0, 255, 0)
+
+# Font
+font = pygame.font.SysFont(None, 55)
+
+# Shapes
+shapes = {
+    'Circle': (pygame.draw.circle, (400, 200), 50),
+    'Square': (pygame.draw.rect, pygame.Rect(350, 350, 100, 100)),
+    'Triangle': (pygame.draw.polygon, [(400, 250), (350, 350), (450, 350)])
+}
+
+# Instructions
+instructions = font.render('Match the shape with its name!', True, black)
+
+def draw_shape(shape_name):
+    shape_func, shape_params = shapes[shape_name]
+    shape_func(screen, blue, shape_params)
+
+def main():
+    clock = pygame.time.Clock()
+    shape_names = list(shapes.keys())
+    random.shuffle(shape_names)
+    current_shape = shape_names[0]
+    
+    while True:
+        screen.fill(white)
+        screen.blit(instructions, (100, 50))
+
+        draw_shape(current_shape)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c and current_shape == 'Circle':
+                    current_shape = random.choice(shape_names)
+                elif event.key == pygame.K_s and current_shape == 'Square':
+                    current_shape = random.choice(shape_names)
+                elif event.key == pygame.K_t and current_shape == 'Triangle':
+                    current_shape = random.choice(shape_names)
+        
+        # Display the options
+        text_circle = font.render('Press C for Circle', True, black)
+        text_square = font.render('Press S for Square', True, black)
+        text_triangle = font.render('Press T for Triangle', True, black)
+        
+        screen.blit(text_circle, (50, 450))
+        screen.blit(text_square, (300, 450))
+        screen.blit(text_triangle, (550, 450))
+
+        pygame.display.flip()
+        clock.tick(30)
+
+if __name__ == '__main__':
+    main()
+##pause
